@@ -80,7 +80,9 @@
     // leave the posters showing rather than autoplaying anything
     loops.forEach(function (v) { v.setAttribute('poster', v.getAttribute('poster')); });
   } else if ('IntersectionObserver' in window) {
+    var observerFired = false;
     var io = new IntersectionObserver(function (entries) {
+      observerFired = true;
       entries.forEach(function (e) {
         var v = e.target;
         if (e.isIntersecting) {
@@ -96,6 +98,20 @@
       // never reach a high ratio, so a fractional threshold risks never firing.
     }, { rootMargin: '200px 0px', threshold: 0 });
     loops.forEach(function (v) { io.observe(v); });
+
+    // Same failsafe as the reveal animation: if the observer never delivers,
+    // the loops would never get a source and every row would sit on a still.
+    // Load whatever is on screen rather than leaving the section dead.
+    setTimeout(function () {
+      if (observerFired) return;
+      loops.forEach(function (v) {
+        var b = v.getBoundingClientRect();
+        if (b.top < window.innerHeight * 1.5 && b.bottom > -window.innerHeight * 0.5) {
+          primed(v);
+          v.play().catch(function () {});
+        }
+      });
+    }, 3000);
   } else {
     loops.forEach(function (v) { primed(v); v.play().catch(function () {}); });
   }
