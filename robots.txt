@@ -1,0 +1,12 @@
+# This build is still a draft living on a *.vercel.app URL while the real
+# site is elsewhere. Letting search engines index it would put a second copy
+# of the same copy and pricing in the index, competing with the live site.
+#
+# WHEN THE REAL DOMAIN POINTS HERE: replace the block below with
+#   User-agent: *
+#   Allow: /
+#   Sitemap: https://nocausefilms.com/sitemap.xml
+# and add a sitemap.xml listing /, /wedding-deck/, /faqs/, /contact/.
+
+User-agent: *
+Disallow: /
