@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inquire | No Cause Films</title>
-<meta name="description" content="Get in touch with No Cause Films about your wedding film.">
+<meta name="description" content="Tell me about your wedding. Inquire about a wedding film with No Cause Films.">
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/style.css">
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
@@ -21,14 +22,87 @@
   </div>
 </header>
 
-<section class="contact-block">
-  <div class="stack center reveal">
+<section class="section center">
+  <div class="wrap--narrow reveal">
     <p class="eyebrow">Let me tell your story</p>
-    <h1 class="h-display">No Cause Films</h1>
+    <h1 class="h-display">Inquire</h1>
+    <div class="prose prose--center">
+      <p>Fill this out and answer as thoroughly as you'd like. The more I know about you two and what you're planning, the better I can tell whether I'm the right fit for your day.</p>
+      <p>You can expect to hear back from me within two business days.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="form-wrap">
+
+    <form id="inquiry-form" class="form" novalidate>
+      <div class="field">
+        <label for="names">Your names</label>
+        <input type="text" id="names" name="names" autocomplete="name" required>
+      </div>
+
+      <div class="field-pair">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="phone">Phone <span class="opt">(optional)</span></label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="field-pair">
+        <div class="field">
+          <label for="date">Wedding date</label>
+          <input type="date" id="date" name="date" required>
+        </div>
+        <div class="field">
+          <label for="package">Package you're drawn to</label>
+          <select id="package" name="package">
+            <option value="">Select one</option>
+            <option>Promise</option>
+            <option>Forever</option>
+            <option>No Cause Signature</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="venue">Venue and location</label>
+        <input type="text" id="venue" name="venue" placeholder="Venue, city, state or country" required>
+      </div>
+
+      <div class="field">
+        <label for="referral">How did you hear about me? <span class="opt">(optional)</span></label>
+        <input type="text" id="referral" name="referral">
+      </div>
+
+      <div class="field">
+        <label for="story">Tell me about you two and your plans for the day</label>
+        <textarea id="story" name="story" rows="6" required></textarea>
+      </div>
+
+      <button class="btn" type="submit">Send Inquiry</button>
+      <p class="form-note">This form is a draft and isn't sending yet. In the meantime, email works: <a href="mailto:nocausefilms@gmail.com?subject=Wedding%20Film%20Inquiry">nocausefilms@gmail.com</a>.</p>
+    </form>
+
+    <div id="inquiry-success" class="form-success" hidden>
+      <p class="eyebrow">Thank you</p>
+      <h2 class="h-title">Talk soon.</h2>
+      <p class="prose">I've got your details and I'll be in touch within two business days. I can't wait to hear more about your day.</p>
+    </div>
+
+  </div>
+</section>
+
+<section class="section section--tight center">
+  <div class="wrap--narrow reveal">
+    <p class="eyebrow">Or reach me directly</p>
     <p class="contact-line"><a href="mailto:nocausefilms@gmail.com?subject=Wedding%20Film%20Inquiry">nocausefilms@gmail.com</a></p>
     <p class="contact-line"><a href="tel:+14359002034">(435) 900-2034</a></p>
-    <p>Send me an email including your preferred package, dates, venue, and a little bit about yourself.</p>
-    <p><a class="btn" href="mailto:nocausefilms@gmail.com?subject=Wedding%20Film%20Inquiry">Send an Email</a></p>
   </div>
 </section>
 

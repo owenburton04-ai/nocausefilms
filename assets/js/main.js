@@ -1,7 +1,41 @@
 // NO CAUSE FILMS — shared behavior
 
+// ---------------------------------------------------------------------------
+// Intro splash. The `intro-armed` class is set by an inline script in <head>
+// before first paint; this only runs the exit animation and unlocks scroll.
+// ---------------------------------------------------------------------------
+(function () {
+  var root = document.documentElement;
+  var intro = document.getElementById('intro');
+  if (!intro) return;
+
+  if (!root.classList.contains('intro-armed')) {
+    intro.remove();
+    return;
+  }
+
+  var done = false;
+  var finish = function () {
+    if (done) return;
+    done = true;
+    try { sessionStorage.setItem('ncf-intro', '1'); } catch (e) {}
+    intro.classList.add('is-leaving');
+    root.classList.remove('intro-armed');
+    setTimeout(function () { intro.remove(); }, 700);
+  };
+
+  var timer = setTimeout(finish, 2000);
+  // let an impatient visitor skip it
+  intro.addEventListener('click', function () {
+    clearTimeout(timer);
+    finish();
+  });
+})();
+
+// ---------------------------------------------------------------------------
 // Hero ambient video: sources are deferred via data-src so the poster
 // paints first; swap them in once the page is interactive.
+// ---------------------------------------------------------------------------
 (function () {
   var hero = document.querySelector('[data-hero-video]');
   if (!hero) return;
@@ -16,15 +50,57 @@
   else window.addEventListener('load', load);
 })();
 
-// Film players: poster cover with a play button; nothing downloads until
-// clicked. Short teasers are plain progressive files. The two full-length
-// films are HLS, so viewers only stream the part they actually watch.
-// Playing one film pauses the others.
+// ---------------------------------------------------------------------------
+// Films: each row shows a short silent loop that starts when it scrolls into
+// view and pauses when it leaves, so four autoplaying clips never cost four
+// simultaneous downloads. Clicking one opens the full film with sound.
+// ---------------------------------------------------------------------------
 (function () {
-  var films = document.querySelectorAll('[data-film]');
+  var rows = [].slice.call(document.querySelectorAll('[data-film]'));
+  if (!rows.length) return;
 
-  // hls.js is ~400KB, so it is only fetched if someone actually opens a
-  // full-length film. Safari never needs it.
+  var lightbox = document.getElementById('lightbox');
+  var lbVideo = lightbox ? lightbox.querySelector('.lightbox-video') : null;
+  var lbClose = lightbox ? lightbox.querySelector('.lightbox-close') : null;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // --- loops -------------------------------------------------------------
+  var primed = function (video) {
+    if (video.dataset.primed) return;
+    video.dataset.primed = '1';
+    video.querySelectorAll('source[data-src]').forEach(function (s) {
+      s.src = s.dataset.src;
+    });
+    video.load();
+  };
+
+  var loops = rows.map(function (r) { return r.querySelector('.film-loop'); });
+
+  if (reduced) {
+    // leave the posters showing rather than autoplaying anything
+    loops.forEach(function (v) { v.setAttribute('poster', v.getAttribute('poster')); });
+  } else if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) {
+          primed(v);
+          if (!document.body.classList.contains('lightbox-open')) {
+            v.play().catch(function () {});
+          }
+        } else {
+          v.pause();
+        }
+      });
+    }, { rootMargin: '200px 0px', threshold: 0.25 });
+    loops.forEach(function (v) { io.observe(v); });
+  } else {
+    loops.forEach(function (v) { primed(v); v.play().catch(function () {}); });
+  }
+
+  // --- lightbox ----------------------------------------------------------
+  if (!lightbox || !lbVideo) return;
+
   var hlsLibPromise = null;
   var loadHlsLib = function () {
     if (hlsLibPromise) return hlsLibPromise;
@@ -38,23 +114,24 @@
     return hlsLibPromise;
   };
 
+  var hlsInstance = null;
+
   var useHlsJs = function (video, src) {
     return loadHlsLib().then(function () {
       if (window.Hls && window.Hls.isSupported()) {
-        var hls = new window.Hls({ capLevelToPlayerSize: true });
-        hls.loadSource(src);
-        hls.attachMedia(video);
+        hlsInstance = new window.Hls({ capLevelToPlayerSize: true });
+        hlsInstance.loadSource(src);
+        hlsInstance.attachMedia(video);
       } else {
-        video.src = src; // last resort
+        video.src = src;
       }
     });
   };
 
+  // Only WebKit really plays HLS natively. Chrome reports "maybe" for the
+  // playlist MIME type and then fails, so the native path is gated on the
+  // engine rather than on canPlayType alone.
   var attachHls = function (video, src) {
-    // Only WebKit really plays HLS natively. Chrome reports "maybe" for the
-    // playlist MIME type and then fails, so the native path is gated on the
-    // engine rather than on canPlayType alone, with hls.js as the fallback
-    // if native playback errors anyway.
     var ua = navigator.userAgent;
     var isWebKit = /safari/i.test(ua) && !/chrome|chromium|crios|android|edg|fxios/i.test(ua);
     if (isWebKit && video.canPlayType('application/vnd.apple.mpegurl')) {
@@ -65,40 +142,81 @@
     return useHlsJs(video, src);
   };
 
-  films.forEach(function (film) {
-    var cover = film.querySelector('.film-cover');
-    var video = film.querySelector('video');
-    if (!cover || !video) return;
-    var hlsSrc = film.dataset.hls;
-    var started = false;
+  var teardown = function () {
+    lbVideo.pause();
+    if (hlsInstance) {
+      hlsInstance.destroy();
+      hlsInstance = null;
+    }
+    lbVideo.removeAttribute('src');
+    while (lbVideo.firstChild) lbVideo.removeChild(lbVideo.firstChild);
+    lbVideo.load();
+  };
 
-    cover.addEventListener('click', function () {
-      var ready = Promise.resolve();
-      if (!started) {
-        started = true;
-        if (hlsSrc) {
-          ready = attachHls(video, hlsSrc);
-        } else {
-          video.querySelectorAll('source[data-src]').forEach(function (s) {
-            s.src = s.dataset.src;
-          });
-          video.load();
-        }
-      }
-      cover.classList.add('is-hidden');
-      video.setAttribute('controls', '');
-      films.forEach(function (other) {
-        var v = other.querySelector('video');
-        if (v && v !== video) v.pause();
+  var close = function () {
+    lightbox.classList.add('is-closing');
+    document.body.classList.remove('lightbox-open');
+    teardown();
+    setTimeout(function () {
+      lightbox.hidden = true;
+      lightbox.classList.remove('is-closing');
+    }, 250);
+    // resume whichever loops are back on screen
+    if (!reduced) {
+      loops.forEach(function (v) {
+        var b = v.getBoundingClientRect();
+        if (b.top < window.innerHeight && b.bottom > 0) v.play().catch(function () {});
       });
-      ready.then(function () {
-        return video.play();
-      }).catch(function () {});
-    });
+    }
+  };
+
+  var open = function (row) {
+    loops.forEach(function (v) { v.pause(); });
+    lightbox.classList.remove('is-closing');
+    lightbox.hidden = false;
+    document.body.classList.add('lightbox-open');
+
+    lbVideo.setAttribute('aria-label', row.dataset.title || 'Film');
+
+    var ready;
+    if (row.dataset.fullHls) {
+      ready = attachHls(lbVideo, row.dataset.fullHls);
+    } else {
+      // progressive teaser: webm first, mp4 fallback for Safari
+      if (row.dataset.fullWebm) {
+        var w = document.createElement('source');
+        w.src = row.dataset.fullWebm;
+        w.type = 'video/webm';
+        lbVideo.appendChild(w);
+      }
+      var m = document.createElement('source');
+      m.src = row.dataset.fullMp4;
+      m.type = 'video/mp4';
+      lbVideo.appendChild(m);
+      lbVideo.load();
+      ready = Promise.resolve();
+    }
+
+    ready.then(function () { return lbVideo.play(); }).catch(function () {});
+  };
+
+  rows.forEach(function (row) {
+    var btn = row.querySelector('.film-open');
+    if (btn) btn.addEventListener('click', function () { open(row); });
+  });
+
+  if (lbClose) lbClose.addEventListener('click', close);
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox || e.target.classList.contains('lightbox-stage')) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !lightbox.hidden) close();
   });
 })();
 
+// ---------------------------------------------------------------------------
 // Scroll reveal
+// ---------------------------------------------------------------------------
 (function () {
   var els = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) {
@@ -114,4 +232,32 @@
     });
   }, { threshold: 0.12 });
   els.forEach(function (el) { io.observe(el); });
+})();
+
+// ---------------------------------------------------------------------------
+// Inquiry form. Not wired to a backend yet: this validates and shows the
+// success state so the flow can be reviewed. Replace the marked block with a
+// POST (Formspree / a Vercel route / Resend) when we route it for real.
+// ---------------------------------------------------------------------------
+(function () {
+  var form = document.getElementById('inquiry-form');
+  if (!form) return;
+  var success = document.getElementById('inquiry-success');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    // --- TODO: send the submission here -------------------------------
+    // var data = new FormData(form);
+    // fetch('<endpoint>', { method: 'POST', body: data })
+    // -------------------------------------------------------------------
+
+    form.hidden = true;
+    if (success) {
+      success.hidden = false;
+      success.setAttribute('tabindex', '-1');
+      success.focus();
+    }
+  });
 })();

@@ -20,18 +20,33 @@ branding, no "Watch on YouTube", no external requests of any kind.
 
 ## Video setup
 
-Two different strategies, picked by length:
+Three layers, picked by job:
 
-- **Hero loop and short teasers** (under a minute) are plain progressive files,
-  `.webm` first with an `.mp4` fallback for Safari. The hero is muted and
-  autoplays behind a poster image so the first paint is instant.
-- **The two full-length films** (about 6.5 minutes each) are **HLS**. ffmpeg
-  splits them into 6-second segments and the browser only streams the part
-  someone actually watches, instead of pulling a 60MB file up front. Safari
-  plays HLS natively; every other browser loads `hls.js`, which is only
-  fetched when a viewer actually opens a film.
+- **Hero** is a muted progressive loop (`.webm` with an `.mp4` fallback for
+  Safari) behind a poster image, so the first paint is instant.
+- **Films section** shows four silent ~30s loops (`loop-*.mp4`), all
+  normalised to 4:3 960x720. They start when a row scrolls into view and pause
+  when it leaves, so four autoplaying clips never mean four simultaneous
+  downloads. Loop windows were picked deliberately: both full-length films
+  carry burned-in subtitles and title cards through most of their runtime, so
+  the loops come from the stretches that do not (the reception in *Feel So
+  Young*, the exit and golden hour in *Chanson d'automne*).
+- **Full films** open in a lightbox with sound. The two 6.5-minute films are
+  **HLS**: ffmpeg splits them into 6-second segments so a viewer only streams
+  the part they actually watch instead of pulling ~60MB up front. Safari plays
+  HLS natively; every other browser loads `hls.js`, fetched on demand the
+  first time someone opens a film.
 
-Nothing downloads until clicked (`preload="none"` plus deferred sources).
+Nothing downloads until it is needed (`preload="none"` plus deferred sources).
+
+### Two things that will bite if you touch the CSS
+
+- `img` needs `height: auto`. The markup carries `width`/`height` attributes,
+  so `max-width: 100%` alone shrinks the width but keeps the attribute height.
+  That is what made the 2500x3750 portrait render thousands of pixels tall.
+- `.reveal` is hidden only under a `.js` class, set by an inline script before
+  paint. Without that gate, a script error or a browser with no
+  IntersectionObserver leaves the page permanently blank.
 
 ### Re-encoding a video
 
@@ -68,7 +83,10 @@ headers the HLS segments need.
 ## Notes
 
 - Fonts: Geist, self-hosted in `assets/fonts/` (no Google Fonts request).
-- The inquire flow is a `mailto:` link, matching the current site, which has no
-  form either. A real form can be added later.
+- The homepage plays a short wordmark splash once per browser session
+  (`sessionStorage` key `ncf-intro`), skipped for `prefers-reduced-motion`.
+- **The inquiry form is not wired up yet.** It validates and shows its success
+  state, but sends nothing; the form says so, and email/phone are still listed.
+  The POST goes where `main.js` is marked, in the inquiry-form block.
 - Video quality is limited by what YouTube re-encodes. Swapping in Mckay's
   original exports will look noticeably better.
