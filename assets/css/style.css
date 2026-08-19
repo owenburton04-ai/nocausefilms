@@ -601,7 +601,10 @@ body.lightbox-open { overflow: hidden; }
 
 .form-wrap { max-width: 640px; margin: 0 auto; }
 
-.field { margin-bottom: 1.9rem; }
+/* the intro copy and the form should read as one block, not two sections */
+.section--flush { padding-bottom: 0; }
+
+.field { margin-bottom: 1.5rem; }
 
 .field-pair {
   display: grid;
