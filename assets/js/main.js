@@ -21,10 +21,11 @@
     try { sessionStorage.setItem('ncf-intro', '1'); } catch (e) {}
     intro.classList.add('is-leaving');
     root.classList.remove('intro-armed');
-    setTimeout(function () { intro.remove(); }, 700);
+    // outlives the 1.15s panel fade plus the delayed mark fade
+    setTimeout(function () { intro.remove(); }, 1400);
   };
 
-  var timer = setTimeout(finish, 2000);
+  var timer = setTimeout(finish, 1900);
   // let an impatient visitor skip it
   intro.addEventListener('click', function () {
     clearTimeout(timer);
@@ -39,15 +40,14 @@
 (function () {
   var hero = document.querySelector('[data-hero-video]');
   if (!hero) return;
-  var load = function () {
-    hero.querySelectorAll('source[data-src]').forEach(function (s) {
-      s.src = s.dataset.src;
-    });
-    hero.load();
-    hero.play().catch(function () {});
-  };
-  if (document.readyState === 'complete') load();
-  else window.addEventListener('load', load);
+  // Started right away rather than on window load: the intro splash runs for
+  // ~2.4s over the top, and the reveal should land on footage that is already
+  // moving instead of cutting from a still poster to a video that just began.
+  hero.querySelectorAll('source[data-src]').forEach(function (s) {
+    s.src = s.dataset.src;
+  });
+  hero.load();
+  hero.play().catch(function () {});
 })();
 
 // ---------------------------------------------------------------------------
