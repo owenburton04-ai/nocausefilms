@@ -92,7 +92,9 @@
           v.pause();
         }
       });
-    }, { rootMargin: '200px 0px', threshold: 0.25 });
+      // threshold 0 rather than a fraction: a row taller than the viewport can
+      // never reach a high ratio, so a fractional threshold risks never firing.
+    }, { rootMargin: '200px 0px', threshold: 0 });
     loops.forEach(function (v) { io.observe(v); });
   } else {
     loops.forEach(function (v) { primed(v); v.play().catch(function () {}); });
