@@ -225,15 +225,26 @@
     els.forEach(function (el) { el.classList.add('is-visible'); });
     return;
   }
+  var anyRevealed = false;
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (e.isIntersecting) {
+        anyRevealed = true;
         e.target.classList.add('is-visible');
         io.unobserve(e.target);
       }
     });
   }, { threshold: 0.12 });
   els.forEach(function (el) { io.observe(el); });
+
+  // Failsafe: content starts at opacity 0, so if the observer is present but
+  // never delivers (it needs a render, which some embedded/background views
+  // never do) the page would stay blank for good. Show everything instead.
+  setTimeout(function () {
+    if (!anyRevealed) {
+      els.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+  }, 3000);
 })();
 
 // ---------------------------------------------------------------------------
