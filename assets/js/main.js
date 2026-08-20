@@ -81,20 +81,25 @@
 
   var loops = rows.map(function (r) { return r.querySelector('.film-loop'); });
 
-  // The cover image fades out the first time a preview actually renders
-  // frames, so the tile never hard-cuts from the cover to the loop.
+  // The cover fades out while a preview is actually rendering frames and
+  // fades back in whenever it stops, so at rest the grid always shows the
+  // hand-picked covers and there is never a hard cut in either direction.
+  // The paused video keeps its position underneath; a re-hover resumes the
+  // loop where it left off.
   loops.forEach(function (v, i) {
     v.addEventListener('playing', function () {
-      rows[i].classList.add('is-playing');
-    }, { once: true });
+      if (!v.paused) rows[i].classList.add('is-playing');
+    });
   });
 
+  var stop = function (i) {
+    loops[i].pause();
+    rows[i].classList.remove('is-playing');
+  };
+
   var playOnly = function (video) {
-    loops.forEach(function (v) {
-      if (v !== video) {
-        v.pause();
-        v.currentTime = 0;
-      }
+    loops.forEach(function (v, i) {
+      if (v !== video) stop(i);
     });
     primed(video);
     video.play().catch(function () {});
@@ -110,7 +115,7 @@
           primed(e.target);
           return;
         }
-        e.target.pause();
+        stop(loops.indexOf(e.target));
         // A tile that scrolls away loses its first tap, so coming back to it
         // starts the preview again rather than jumping straight to the film.
         if (activeRow && activeRow.contains(e.target)) activeRow = null;
@@ -131,7 +136,7 @@
         playOnly(loops[i]);
       });
       media.addEventListener('mouseleave', function () {
-        loops[i].pause();
+        stop(i);
       });
     });
   }
@@ -205,7 +210,7 @@
   };
 
   var open = function (row) {
-    loops.forEach(function (v) { v.pause(); });
+    loops.forEach(function (v, i) { stop(i); });
     lightbox.classList.remove('is-closing');
     lightbox.hidden = false;
     document.body.classList.add('lightbox-open');
