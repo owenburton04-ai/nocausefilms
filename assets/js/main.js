@@ -81,6 +81,14 @@
 
   var loops = rows.map(function (r) { return r.querySelector('.film-loop'); });
 
+  // The cover image fades out the first time a preview actually renders
+  // frames, so the tile never hard-cuts from the cover to the loop.
+  loops.forEach(function (v, i) {
+    v.addEventListener('playing', function () {
+      rows[i].classList.add('is-playing');
+    }, { once: true });
+  });
+
   var playOnly = function (video) {
     loops.forEach(function (v) {
       if (v !== video) {
@@ -281,6 +289,28 @@
       els.forEach(function (el) { el.classList.add('is-visible'); });
     }
   }, 3000);
+})();
+
+// ---------------------------------------------------------------------------
+// Mobile menu: the hamburger swaps the nav links for a full-screen list.
+// ---------------------------------------------------------------------------
+(function () {
+  var toggle = document.querySelector('.menu-toggle');
+  var menu = document.getElementById('site-menu');
+  if (!toggle || !menu) return;
+  var closeBtn = menu.querySelector('.menu-close');
+
+  var setOpen = function (open) {
+    menu.hidden = !open;
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.classList.toggle('menu-open', open);
+  };
+
+  toggle.addEventListener('click', function () { setOpen(menu.hidden); });
+  if (closeBtn) closeBtn.addEventListener('click', function () { setOpen(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !menu.hidden) setOpen(false);
+  });
 })();
 
 // ---------------------------------------------------------------------------

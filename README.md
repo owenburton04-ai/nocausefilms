@@ -34,6 +34,10 @@ Three layers, picked by job:
   first tap plays it while a second tap on the same tile opens the full film.
   The scroll observer only preloads what is coming up and pauses what has
   left, so the first hover is never a dead frame.
+  Each tile's cover is a separate `loop-*-poster.webp` layered over the video
+  that fades out on the first `playing` event. Covers are hand-picked frames
+  from the full films, deliberately NOT the loops' first frames, and the fade
+  is what keeps that from reading as a glitch when playback starts.
   Loop windows were picked deliberately: both full-length films
   carry burned-in subtitles and title cards through most of their runtime, so
   the loops come from the stretches that do not (the reception in *Feel So

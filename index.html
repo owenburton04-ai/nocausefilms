@@ -9,7 +9,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/style.css?v=5">
+<link rel="stylesheet" href="/assets/css/style.css?v=6">
 <meta property="og:title" content="No Cause Films">
 <meta property="og:description" content="Your story, told through cinema.">
 <meta property="og:image" content="/assets/img/hero-still.webp">
@@ -33,13 +33,24 @@
   <span class="intro-mark">No Cause Films</span>
 </div>
 
-<header class="site-header site-header--solid">
+<header class="site-header site-header--solid site-header--overlay">
   <div class="nav-group">
     <a class="nav-link" href="/faqs/">FAQs</a>
   </div>
   <a class="brand" href="/">No Cause Films</a>
-  <div class="nav-group nav-group--right"></div>
+  <div class="nav-group nav-group--right">
+    <a class="btn btn--nav" href="/contact/">Inquire</a>
+  </div>
+  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </header>
+
+<nav class="site-menu" id="site-menu" hidden aria-label="Site menu">
+  <button class="menu-close" type="button" aria-label="Close menu">&times;</button>
+  <a href="/faqs/">FAQs</a>
+  <a href="/contact/">Inquire</a>
+</nav>
 
 <section class="hero">
   <div class="hero-media">
@@ -63,8 +74,8 @@
              data-full-hls="/assets/video/feel-so-young/index.m3u8"
              data-title="Feel So Young">
       <div class="film-media">
-        <video class="film-loop" muted loop playsinline preload="none"
-               poster="/assets/video/loop-feel-so-young-poster.webp">
+        <img class="film-poster" src="/assets/video/loop-feel-so-young-poster.webp?v=2" alt="" width="960" height="720" loading="lazy">
+        <video class="film-loop" muted loop playsinline preload="none">
           <source data-src="/assets/video/loop-feel-so-young.mp4" type="video/mp4">
         </video>
         <button class="film-open" type="button">Watch Feel So Young</button>
@@ -76,8 +87,8 @@
              data-full-hls="/assets/video/chanson-dautomne/index.m3u8"
              data-title="Chanson d'automne">
       <div class="film-media">
-        <video class="film-loop" muted loop playsinline preload="none"
-               poster="/assets/video/loop-chanson-dautomne-poster.webp">
+        <img class="film-poster" src="/assets/video/loop-chanson-dautomne-poster.webp?v=2" alt="" width="960" height="720" loading="lazy">
+        <video class="film-loop" muted loop playsinline preload="none">
           <source data-src="/assets/video/loop-chanson-dautomne.mp4" type="video/mp4">
         </video>
         <button class="film-open" type="button">Watch Chanson d'automne</button>
@@ -90,8 +101,8 @@
              data-full-webm="/assets/video/where-forever-flows.webm"
              data-title="Where Forever Flows">
       <div class="film-media">
-        <video class="film-loop" muted loop playsinline preload="none"
-               poster="/assets/video/loop-where-forever-flows-poster.webp?v=2">
+        <img class="film-poster" src="/assets/video/loop-where-forever-flows-poster.webp?v=2" alt="" width="960" height="720" loading="lazy">
+        <video class="film-loop" muted loop playsinline preload="none">
           <source data-src="/assets/video/loop-where-forever-flows.mp4?v=2" type="video/mp4">
         </video>
         <button class="film-open" type="button">Watch Where Forever Flows</button>
@@ -104,8 +115,8 @@
              data-full-webm="/assets/video/sotto-il-sole.webm"
              data-title="Sotto il Sole">
       <div class="film-media">
-        <video class="film-loop" muted loop playsinline preload="none"
-               poster="/assets/video/loop-sotto-il-sole-poster.webp?v=2">
+        <img class="film-poster" src="/assets/video/loop-sotto-il-sole-poster.webp?v=2" alt="" width="960" height="720" loading="lazy">
+        <video class="film-loop" muted loop playsinline preload="none">
           <source data-src="/assets/video/loop-sotto-il-sole.mp4?v=2" type="video/mp4">
         </video>
         <button class="film-open" type="button">Watch Sotto il Sole</button>
@@ -119,7 +130,6 @@
 <section class="section story">
   <div class="story-grid">
     <div class="story-copy reveal">
-      <p class="eyebrow">Introduction</p>
       <h2 class="h-title">Hi friend, welcome.</h2>
       <p class="about-lead">My name is Mckay Meacham.</p>
       <div class="prose">
@@ -132,6 +142,8 @@
         <p>NO CAUSE was built on the belief that not everything meaningful needs an explanation. You don't need permission to create, to explore, to love, or to live honestly.</p>
         <p>I've always been inspired by <a href="https://www.jamesdean.com" target="_blank" rel="noopener">James Dean</a>. Not because he had all the answers, but because he lived with an honesty that couldn't be manufactured. That same authenticity is what I look for on a wedding day. The quiet glances, imperfect moments, and genuine emotions that make every story uniquely its own.</p>
         <p>It's about preserving a love that doesn't need to be justified or performed. A love that simply exists. My goal is to create films that feel just as real. Timeless, honest, and deeply human.</p>
+        <p>Maybe there is <strong>NO CAUSE</strong>.</p>
+        <p>Maybe that's the point.</p>
       </div>
     </div>
     <div class="story-portrait reveal">
@@ -140,19 +152,15 @@
       </figure>
     </div>
   </div>
-  <blockquote class="statement reveal">
-    <p>Maybe there is <em>no cause</em>.</p>
-    <p>Maybe that's the point.</p>
-  </blockquote>
 </section>
 
 <div class="image-band">
-  <img src="/assets/img/hero-still.webp" alt="A black and white still from a No Cause Films wedding film" width="2500" height="1406" loading="lazy">
+  <img src="/assets/img/investment-still.webp" alt="A couple walking through the forest on their wedding day, filmed by No Cause Films" width="1920" height="1080" loading="lazy">
 </div>
 
 <section class="section">
   <div class="wrap--narrow center reveal">
-    <p class="eyebrow">Investment</p>
+    <h2 class="h-section">Investment</h2>
     <div class="prose prose--center">
       <p>Your wedding film is one of the few investments from your wedding day that continues to grow in value over time. Long after the flowers have faded and the day has passed, your film allows you to relive the people, emotions, and moments that made it meaningful. Every film is thoughtfully crafted to reflect your story in a way that feels authentic, cinematic, and timeless.</p>
       <p>If you feel connected to the work, I'd love to hear more about your plans and what matters most to you.</p>
@@ -162,12 +170,21 @@
 </section>
 
 <footer class="site-footer">
+  <div class="footer-social">
+    <a href="https://www.instagram.com/nocausefilms/" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.26.07 1.64.07 4.81s0 3.55-.07 4.81c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.26.06-1.64.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.2 15.55 2.2 15.17 2.2 12s0-3.55.07-4.81c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.4 2.2 8.8 2.2 12 2.2m0-2.2C8.74 0 8.33 0 7.05.07 5.78.13 4.9.33 4.14.63a5.92 5.92 0 0 0-2.13 1.38A5.92 5.92 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05 0 8.33 0 8.74 0 12s0 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.8.72 1.48 1.38 2.13a5.92 5.92 0 0 0 2.13 1.38c.76.3 1.64.5 2.91.56C8.33 24 8.74 24 12 24s3.67 0 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.92 5.92 0 0 0 2.13-1.38 5.92 5.92 0 0 0 1.38-2.13c.3-.76.5-1.64.56-2.91.07-1.28.07-1.69.07-4.95s0-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.92 5.92 0 0 0-1.38-2.13A5.92 5.92 0 0 0 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67 0 15.26 0 12 0Zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84Zm0 10.15A4 4 0 1 1 16 12a4 4 0 0 1-4 4ZM19.85 4.15a1.44 1.44 0 1 1-1.44 1.44 1.44 1.44 0 0 1 1.44-1.44Z"/></svg>
+    </a>
+    <a href="https://www.tiktok.com/@nocausefilms" target="_blank" rel="noopener" aria-label="TikTok">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M19.32 5.56a5.1 5.1 0 0 1-3.08-3.7 5.28 5.28 0 0 1-.1-.96h-3.36v13.67a2.86 2.86 0 1 1-2.86-2.86c.3 0 .58.05.85.13V8.4a6.33 6.33 0 0 0-.85-.06 6.28 6.28 0 1 0 6.28 6.28V8.55a8.4 8.4 0 0 0 4.9 1.57V6.7a5.06 5.06 0 0 1-1.78-1.14Z"/></svg>
+    </a>
+    <a href="https://www.youtube.com/channel/UCZCptxi99xDaxpMvZcBD7iw" target="_blank" rel="noopener" aria-label="YouTube">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19 31.65 31.65 0 0 0 0 12a31.65 31.65 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14A31.65 31.65 0 0 0 24 12a31.65 31.65 0 0 0-.5-5.81ZM9.6 15.6V8.4L15.83 12Z"/></svg>
+    </a>
+  </div>
   <span class="footer-mark">NC</span>
-  <div class="footer-links">
-    <a href="https://www.instagram.com/nocausefilms/" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://www.tiktok.com/@nocausefilms" target="_blank" rel="noopener">TikTok</a>
-    <a href="https://www.youtube.com/channel/UCZCptxi99xDaxpMvZcBD7iw" target="_blank" rel="noopener">YouTube</a>
-    <a href="mailto:nocausefilms@gmail.com">Email</a>
+  <div class="footer-contact">
+    <a href="mailto:nocausefilms@gmail.com">nocausefilms@gmail.com</a>
+    <a href="tel:+14359002034">(435) 900-2034</a>
   </div>
 </footer>
 
@@ -178,6 +195,6 @@
   </div>
 </div>
 
-<script src="/assets/js/main.js?v=6" defer></script>
+<script src="/assets/js/main.js?v=7" defer></script>
 </body>
 </html>
