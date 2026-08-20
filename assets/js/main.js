@@ -51,9 +51,10 @@
 })();
 
 // ---------------------------------------------------------------------------
-// Films: each row shows a short silent loop that starts when it scrolls into
-// view and pauses when it leaves, so four autoplaying clips never cost four
-// simultaneous downloads. Clicking one opens the full film with sound.
+// Films: each tile holds a short silent preview loop. Nothing plays on its
+// own. On a mouse, hovering a tile plays its preview; on a touch screen the
+// first tap plays it and a second tap on the same tile opens the full film
+// with sound.
 // ---------------------------------------------------------------------------
 (function () {
   var rows = [].slice.call(document.querySelectorAll('[data-film]'));
@@ -63,8 +64,12 @@
   var lbVideo = lightbox ? lightbox.querySelector('.lightbox-video') : null;
   var lbClose = lightbox ? lightbox.querySelector('.lightbox-close') : null;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  // On touch, the tile whose preview is currently running. A second tap on it
+  // is what opens the full film.
+  var activeRow = null;
 
-  // --- loops -------------------------------------------------------------
+  // --- previews ----------------------------------------------------------
   var primed = function (video) {
     if (video.dataset.primed) return;
     video.dataset.primed = '1';
@@ -76,44 +81,51 @@
 
   var loops = rows.map(function (r) { return r.querySelector('.film-loop'); });
 
-  if (reduced) {
-    // leave the posters showing rather than autoplaying anything
-    loops.forEach(function (v) { v.setAttribute('poster', v.getAttribute('poster')); });
-  } else if ('IntersectionObserver' in window) {
-    var observerFired = false;
+  var playOnly = function (video) {
+    loops.forEach(function (v) {
+      if (v !== video) {
+        v.pause();
+        v.currentTime = 0;
+      }
+    });
+    primed(video);
+    video.play().catch(function () {});
+  };
+
+  // Preload on approach so the first hover or tap is not a dead frame, and
+  // stop anything that scrolls away. Playback itself is only ever started by
+  // the visitor, so there is no autoplay failsafe to add here.
+  if (!reduced && 'IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
-      observerFired = true;
       entries.forEach(function (e) {
-        var v = e.target;
         if (e.isIntersecting) {
-          primed(v);
-          if (!document.body.classList.contains('lightbox-open')) {
-            v.play().catch(function () {});
-          }
-        } else {
-          v.pause();
+          primed(e.target);
+          return;
         }
+        e.target.pause();
+        // A tile that scrolls away loses its first tap, so coming back to it
+        // starts the preview again rather than jumping straight to the film.
+        if (activeRow && activeRow.contains(e.target)) activeRow = null;
       });
-      // threshold 0 rather than a fraction: a row taller than the viewport can
-      // never reach a high ratio, so a fractional threshold risks never firing.
+      // threshold 0 rather than a fraction: a tile taller than the viewport
+      // can never reach a high ratio, so a fractional threshold risks never
+      // firing at all.
     }, { rootMargin: '200px 0px', threshold: 0 });
     loops.forEach(function (v) { io.observe(v); });
+  }
 
-    // Same failsafe as the reveal animation: if the observer never delivers,
-    // the loops would never get a source and every row would sit on a still.
-    // Load whatever is on screen rather than leaving the section dead.
-    setTimeout(function () {
-      if (observerFired) return;
-      loops.forEach(function (v) {
-        var b = v.getBoundingClientRect();
-        if (b.top < window.innerHeight * 1.5 && b.bottom > -window.innerHeight * 0.5) {
-          primed(v);
-          v.play().catch(function () {});
-        }
+  if (canHover) {
+    rows.forEach(function (row, i) {
+      var media = row.querySelector('.film-media');
+      if (!media) return;
+      media.addEventListener('mouseenter', function () {
+        if (document.body.classList.contains('lightbox-open')) return;
+        playOnly(loops[i]);
       });
-    }, 3000);
-  } else {
-    loops.forEach(function (v) { primed(v); v.play().catch(function () {}); });
+      media.addEventListener('mouseleave', function () {
+        loops[i].pause();
+      });
+    });
   }
 
   // --- lightbox ----------------------------------------------------------
@@ -179,13 +191,9 @@
       lightbox.hidden = true;
       lightbox.classList.remove('is-closing');
     }, 250);
-    // resume whichever loops are back on screen
-    if (!reduced) {
-      loops.forEach(function (v) {
-        var b = v.getBoundingClientRect();
-        if (b.top < window.innerHeight && b.bottom > 0) v.play().catch(function () {});
-      });
-    }
+    // Previews only ever run from a hover or a tap now, so nothing resumes
+    // on its own here.
+    activeRow = null;
   };
 
   var open = function (row) {
@@ -218,9 +226,21 @@
     ready.then(function () { return lbVideo.play(); }).catch(function () {});
   };
 
-  rows.forEach(function (row) {
+  // On a mouse the preview is already running under the cursor, so a click
+  // goes straight to the film. On a touch screen the first tap has to stand
+  // in for the hover, so it starts the preview and only a second tap on the
+  // same tile opens the player.
+  rows.forEach(function (row, i) {
     var btn = row.querySelector('.film-open');
-    if (btn) btn.addEventListener('click', function () { open(row); });
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      if (canHover || activeRow === row) {
+        open(row);
+        return;
+      }
+      activeRow = row;
+      playOnly(loops[i]);
+    });
   });
 
   if (lbClose) lbClose.addEventListener('click', close);
@@ -264,29 +284,18 @@
 })();
 
 // ---------------------------------------------------------------------------
-// Inquiry form. Not wired to a backend yet: this validates and shows the
-// success state so the flow can be reviewed. Replace the marked block with a
-// POST (Formspree / a Vercel route / Resend) when we route it for real.
+// HoneyBook embed failsafe. The widget injects an iframe and then drives its
+// height over postMessage, starting from 0. If that handshake never lands the
+// form is left collapsed and the page looks empty, so fall back to the height
+// the widget ships on the element.
 // ---------------------------------------------------------------------------
 (function () {
-  var form = document.getElementById('inquiry-form');
-  if (!form) return;
-  var success = document.getElementById('inquiry-success');
+  var slot = document.querySelector('[class^="hb-p-"]');
+  if (!slot) return;
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (!form.reportValidity()) return;
-
-    // --- TODO: send the submission here -------------------------------
-    // var data = new FormData(form);
-    // fetch('<endpoint>', { method: 'POST', body: data })
-    // -------------------------------------------------------------------
-
-    form.hidden = true;
-    if (success) {
-      success.hidden = false;
-      success.setAttribute('tabindex', '-1');
-      success.focus();
-    }
-  });
+  setTimeout(function () {
+    var frame = slot.querySelector('iframe');
+    if (!frame || frame.offsetHeight > 0) return;
+    frame.style.height = (parseInt(frame.getAttribute('height'), 10) || 750) + 'px';
+  }, 4000);
 })();

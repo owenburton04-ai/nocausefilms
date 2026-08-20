@@ -14,20 +14,27 @@ branding, no "Watch on YouTube", no external requests of any kind.
 | Path | Page |
 | --- | --- |
 | `/` | Home: hero film, four films, about, investment |
-| `/wedding-deck/` | Pricing and packages |
+| `/wedding-deck/` | Pricing and packages. Unlinked from the nav, reachable by URL |
 | `/faqs/` | FAQs |
-| `/contact/` | Inquire (email and phone) |
+| `/contact/` | Inquire. Only linked from the buttons at the end of a page |
+
+The nav is deliberately down to FAQs and the wordmark: Mckay wants someone to
+read the whole homepage before the Inquire button appears.
 
 ## Video setup
 
 Three layers, picked by job:
 
 - **Hero** is a muted progressive loop (`.webm` with an `.mp4` fallback for
-  Safari) behind a poster image, so the first paint is instant.
+  Safari) behind a poster image, so the first paint is instant. It autoplays
+  immediately and is the only video on the page that does.
 - **Films section** shows four silent ~30s loops (`loop-*.mp4`), all
-  normalised to 4:3 960x720. They start when a row scrolls into view and pause
-  when it leaves, so four autoplaying clips never mean four simultaneous
-  downloads. Loop windows were picked deliberately: both full-length films
+  normalised to 4:3 960x720, in a four-across grid. Nothing autoplays: a
+  preview runs while the pointer is over its tile, and on a touch screen the
+  first tap plays it while a second tap on the same tile opens the full film.
+  The scroll observer only preloads what is coming up and pauses what has
+  left, so the first hover is never a dead frame.
+  Loop windows were picked deliberately: both full-length films
   carry burned-in subtitles and title cards through most of their runtime, so
   the loops come from the stretches that do not (the reception in *Feel So
   Young*, the exit and golden hour in *Chanson d'automne*).
@@ -85,8 +92,11 @@ headers the HLS segments need.
 - Fonts: Geist, self-hosted in `assets/fonts/` (no Google Fonts request).
 - The homepage plays a short wordmark splash once per browser session
   (`sessionStorage` key `ncf-intro`), skipped for `prefers-reduced-motion`.
-- **The inquiry form is not wired up yet.** It validates and shows its success
-  state, but sends nothing; the form says so, and email/phone are still listed.
-  The POST goes where `main.js` is marked, in the inquiry-form block.
+- `/contact/` embeds Mckay's own **HoneyBook** contact form (placement
+  `6a2ed9c8455fab2ae55f2ff7`), the same one his live site runs, so inquiries
+  land in HoneyBook and nothing here needs a backend. The widget sets the
+  iframe height over postMessage starting from 0; `main.js` falls back to the
+  height on the element if that handshake never lands, so a failed resize
+  cannot leave the page looking empty.
 - Video quality is limited by what YouTube re-encodes. Swapping in Mckay's
   original exports will look noticeably better.

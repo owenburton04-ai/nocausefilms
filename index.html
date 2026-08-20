@@ -9,7 +9,7 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/style.css?v=4">
+<link rel="stylesheet" href="/assets/css/style.css?v=5">
 <meta property="og:title" content="No Cause Films">
 <meta property="og:description" content="Your story, told through cinema.">
 <meta property="og:image" content="/assets/img/hero-still.webp">
@@ -33,15 +33,12 @@
   <span class="intro-mark">No Cause Films</span>
 </div>
 
-<header class="site-header">
+<header class="site-header site-header--solid">
   <div class="nav-group">
-    <a class="nav-link" href="/wedding-deck/">Pricing</a>
-    <a class="nav-link" href="/contact/">Inquire</a>
-  </div>
-  <a class="brand" href="/">No Cause Films</a>
-  <div class="nav-group nav-group--right">
     <a class="nav-link" href="/faqs/">FAQs</a>
   </div>
+  <a class="brand" href="/">No Cause Films</a>
+  <div class="nav-group nav-group--right"></div>
 </header>
 
 <section class="hero">
@@ -53,90 +50,70 @@
       <source data-src="/assets/video/hero-as-it-was.mp4" type="video/mp4">
     </video>
   </div>
-  <div class="hero-scrim"></div>
-  <div class="hero-content">
-    <h1 class="hero-tagline">Your story, told through cinema.</h1>
-  </div>
 </section>
 
-<section class="section section--tight center">
-  <div class="wrap reveal">
-    <h2 class="h-display">Authentic &amp; Classic<br>Storytelling</h2>
-  </div>
+<section class="tagline-band center">
+  <h1 class="hero-tagline">Your story,<br>told through cinema.</h1>
 </section>
 
 <section class="films" id="films">
+  <div class="films-grid">
 
-  <article class="film-row reveal" data-film
-           data-full-mp4="/assets/video/where-forever-flows.mp4"
-           data-full-webm="/assets/video/where-forever-flows.webm"
-           data-title="Where Forever Flows">
-    <div class="film-media">
-      <video class="film-loop" autoplay muted loop playsinline preload="none"
-             poster="/assets/video/loop-where-forever-flows-poster.webp?v=2">
-        <source data-src="/assets/video/loop-where-forever-flows.mp4?v=2" type="video/mp4">
-      </video>
-      <button class="film-open" type="button">Watch the film</button>
-    </div>
-    <div class="film-meta">
-      <p class="film-index">01</p>
-      <h3 class="film-name">Where Forever Flows</h3>
-      <p class="film-kind">A Wedding Teaser</p>
-    </div>
-  </article>
+    <article class="film-tile reveal" data-film
+             data-full-hls="/assets/video/feel-so-young/index.m3u8"
+             data-title="Feel So Young">
+      <div class="film-media">
+        <video class="film-loop" muted loop playsinline preload="none"
+               poster="/assets/video/loop-feel-so-young-poster.webp">
+          <source data-src="/assets/video/loop-feel-so-young.mp4" type="video/mp4">
+        </video>
+        <button class="film-open" type="button">Watch Feel So Young</button>
+      </div>
+      <h3 class="film-caption">Feel So Young <span>|</span> A Wedding Film</h3>
+    </article>
 
-  <article class="film-row film-row--flip reveal" data-film
-           data-full-mp4="/assets/video/sotto-il-sole.mp4"
-           data-full-webm="/assets/video/sotto-il-sole.webm"
-           data-title="Sotto il Sole">
-    <div class="film-media">
-      <video class="film-loop" autoplay muted loop playsinline preload="none"
-             poster="/assets/video/loop-sotto-il-sole-poster.webp?v=2">
-        <source data-src="/assets/video/loop-sotto-il-sole.mp4?v=2" type="video/mp4">
-      </video>
-      <button class="film-open" type="button">Watch the film</button>
-    </div>
-    <div class="film-meta">
-      <p class="film-index">02</p>
-      <h3 class="film-name">Sotto il Sole</h3>
-      <p class="film-kind">An Italian Summer in Utah</p>
-    </div>
-  </article>
+    <article class="film-tile reveal" data-film
+             data-full-hls="/assets/video/chanson-dautomne/index.m3u8"
+             data-title="Chanson d'automne">
+      <div class="film-media">
+        <video class="film-loop" muted loop playsinline preload="none"
+               poster="/assets/video/loop-chanson-dautomne-poster.webp">
+          <source data-src="/assets/video/loop-chanson-dautomne.mp4" type="video/mp4">
+        </video>
+        <button class="film-open" type="button">Watch Chanson d'automne</button>
+      </div>
+      <h3 class="film-caption">Chanson d'automne <span>|</span> A Wedding Film</h3>
+    </article>
 
-  <article class="film-row reveal" data-film
-           data-full-hls="/assets/video/feel-so-young/index.m3u8"
-           data-title="Feel So Young">
-    <div class="film-media">
-      <video class="film-loop" autoplay muted loop playsinline preload="none"
-             poster="/assets/video/loop-feel-so-young-poster.webp">
-        <source data-src="/assets/video/loop-feel-so-young.mp4" type="video/mp4">
-      </video>
-      <button class="film-open" type="button">Watch the film</button>
-    </div>
-    <div class="film-meta">
-      <p class="film-index">03</p>
-      <h3 class="film-name">Feel So Young</h3>
-      <p class="film-kind">A Wedding Film</p>
-    </div>
-  </article>
+    <article class="film-tile reveal" data-film
+             data-full-mp4="/assets/video/where-forever-flows.mp4"
+             data-full-webm="/assets/video/where-forever-flows.webm"
+             data-title="Where Forever Flows">
+      <div class="film-media">
+        <video class="film-loop" muted loop playsinline preload="none"
+               poster="/assets/video/loop-where-forever-flows-poster.webp?v=2">
+          <source data-src="/assets/video/loop-where-forever-flows.mp4?v=2" type="video/mp4">
+        </video>
+        <button class="film-open" type="button">Watch Where Forever Flows</button>
+      </div>
+      <h3 class="film-caption">Where Forever Flows <span>|</span> A Wedding Teaser</h3>
+    </article>
 
-  <article class="film-row film-row--flip reveal" data-film
-           data-full-hls="/assets/video/chanson-dautomne/index.m3u8"
-           data-title="Chanson d'automne">
-    <div class="film-media">
-      <video class="film-loop" autoplay muted loop playsinline preload="none"
-             poster="/assets/video/loop-chanson-dautomne-poster.webp">
-        <source data-src="/assets/video/loop-chanson-dautomne.mp4" type="video/mp4">
-      </video>
-      <button class="film-open" type="button">Watch the film</button>
-    </div>
-    <div class="film-meta">
-      <p class="film-index">04</p>
-      <h3 class="film-name">Chanson d'automne</h3>
-      <p class="film-kind">A Wedding Film</p>
-    </div>
-  </article>
+    <article class="film-tile reveal" data-film
+             data-full-mp4="/assets/video/sotto-il-sole.mp4"
+             data-full-webm="/assets/video/sotto-il-sole.webm"
+             data-title="Sotto il Sole">
+      <div class="film-media">
+        <video class="film-loop" muted loop playsinline preload="none"
+               poster="/assets/video/loop-sotto-il-sole-poster.webp?v=2">
+          <source data-src="/assets/video/loop-sotto-il-sole.mp4?v=2" type="video/mp4">
+        </video>
+        <button class="film-open" type="button">Watch Sotto il Sole</button>
+      </div>
+      <h3 class="film-caption">Sotto il Sole <span>|</span> An Italian Summer in Utah</h3>
+    </article>
 
+  </div>
 </section>
 
 <section class="section story">
@@ -184,10 +161,6 @@
   </div>
 </section>
 
-<div class="image-band">
-  <img src="/assets/img/closing-still.webp" alt="A couple on their wedding day, filmed by No Cause Films" width="2500" height="1406" loading="lazy">
-</div>
-
 <footer class="site-footer">
   <span class="footer-mark">NC</span>
   <div class="footer-links">
@@ -205,6 +178,6 @@
   </div>
 </div>
 
-<script src="/assets/js/main.js?v=5" defer></script>
+<script src="/assets/js/main.js?v=6" defer></script>
 </body>
 </html>
