@@ -25,7 +25,7 @@ Inquire link right, all in white over the hero.
 
 Three layers, picked by job:
 
-- **Hero** is Mckay's 26s "Website Montage" (YouTube `cq5TwXduqTY`), a muted
+- **Hero** is Mckay's 31s "Montage" (YouTube `q7y-FceybKE`, updated Sep 2026), a muted
   progressive H.264 loop (`hero-montage.mp4`; a VP9 webm came out larger, so there is only the mp4)
   that fills the viewport with the transparent header laid over it. The poster
   (`hero-montage-poster.webp`, cut from the still Mckay sent) is also the
