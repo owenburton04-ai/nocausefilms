@@ -540,7 +540,8 @@ body.lightbox-open { overflow: hidden; }
    54.5% and the 5:6 portrait right-aligned at 34.2%. Type is fixed-size on
    the live site (12px body), so it is fixed here too. */
 .story {
-  padding: clamp(3rem, 5.3vw, 76px) var(--pad) clamp(3.5rem, 2px + 7.5vw, 152px);
+  /* 54px below the hero at 1440, 76px at 2000, like the live site */
+  padding: clamp(2.5rem, 3.9vw - 2px, 76px) var(--pad) clamp(3.5rem, 2px + 7.5vw, 152px);
 }
 .story .h-title {
   font-size: 38px;

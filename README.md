@@ -99,6 +99,9 @@ headers the HLS segments need.
 ## Notes
 
 - Fonts: Geist, self-hosted in `assets/fonts/` (no Google Fonts request).
+- There is no tagline band between the hero and the about section; the live
+  site goes straight from the montage to "Hi friend, welcome." and Mckay wants
+  the two to match exactly.
 - There is no intro splash. One existed (a wordmark over white before the
   hero); Mckay asked for it to go so the video starts the moment the link opens.
 - `/contact/` embeds Mckay's own **HoneyBook** contact form (placement
