@@ -307,6 +307,12 @@ body.menu-open { overflow: hidden; }
   line-height: 1.15;
 }
 
+/* Page title that should sit quietly above a form rather than announce it. */
+.h-display--small {
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  letter-spacing: 0.22em;
+}
+
 .h-title {
   color: var(--black);
   font-size: clamp(1.9rem, 4vw, 3rem);
