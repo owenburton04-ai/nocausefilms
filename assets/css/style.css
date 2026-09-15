@@ -683,8 +683,10 @@ body.lightbox-open { overflow: hidden; }
 
 /* ---------- inquiry form ---------- */
 
-/* Holds the HoneyBook embed, which brings its own field styling. */
-.form-wrap { max-width: 640px; margin: 0 auto; }
+/* Holds the HoneyBook embed, which brings its own field styling. Narrower
+   measure and less air above it so the form sits right under the title. */
+.form-wrap { max-width: 560px; margin: 0 auto; }
+.section--form { padding-top: clamp(1.25rem, 3vw, 2rem); }
 
 /* the intro copy and the form should read as one block, not two sections */
 .section--flush { padding-bottom: 0; }
