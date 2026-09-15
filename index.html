@@ -9,37 +9,22 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/style.css?v=8">
+<link rel="stylesheet" href="/assets/css/style.css?v=9">
 <meta property="og:title" content="No Cause Films">
 <meta property="og:description" content="Your story, told through cinema.">
-<meta property="og:image" content="/assets/img/hero-still.webp">
+<meta property="og:image" content="/assets/video/hero-montage-poster.webp">
 <meta property="og:type" content="website">
-<script>
-  // Decide before first paint so the splash never flashes on repeat views.
-  (function () {
-    try {
-      document.documentElement.classList.add('js');
-      var seen = sessionStorage.getItem('ncf-intro');
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (!seen && !reduced) document.documentElement.classList.add('intro-armed');
-    } catch (e) {}
-  })();
-</script>
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<div class="intro" id="intro" aria-hidden="true">
-  <div class="intro-bg"></div>
-  <span class="intro-mark">No Cause Films</span>
-</div>
-
-<header class="site-header site-header--solid site-header--overlay">
+<header class="site-header site-header--overlay">
   <div class="nav-group">
     <a class="nav-link" href="/faqs/">FAQs</a>
   </div>
-  <a class="brand" href="/">No Cause Films</a>
+  <a class="brand" href="/">No Cause<br>Films</a>
   <div class="nav-group nav-group--right">
-    <a class="btn btn--nav" href="/contact/">Inquire</a>
+    <a class="nav-link" href="/contact/">Inquire</a>
   </div>
   <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="Open menu">
     <span></span><span></span><span></span>
@@ -54,77 +39,16 @@
 
 <section class="hero">
   <div class="hero-media">
-    <img src="/assets/video/hero-as-it-was-poster.webp" alt="A couple sharing a quiet moment on their wedding day" width="1440" height="1080" fetchpriority="high">
-    <video data-hero-video autoplay muted loop playsinline preload="none" tabindex="-1" aria-hidden="true"
-           poster="/assets/video/hero-as-it-was-poster.webp">
-      <source data-src="/assets/video/hero-as-it-was.webm" type="video/webm">
-      <source data-src="/assets/video/hero-as-it-was.mp4" type="video/mp4">
+    <img src="/assets/video/hero-montage-poster.webp" alt="A groom laughing in a crowded pool as guests splash around him" width="1920" height="1080" fetchpriority="high">
+    <video data-hero-video muted loop playsinline preload="auto" tabindex="-1" aria-hidden="true"
+           poster="/assets/video/hero-montage-poster.webp">
+      <source data-src="/assets/video/hero-montage.mp4" type="video/mp4">
     </video>
   </div>
 </section>
 
 <section class="tagline-band center">
   <h1 class="hero-tagline">Your story,<br>told through cinema.</h1>
-</section>
-
-<section class="films" id="films">
-  <div class="films-grid">
-
-    <article class="film-tile reveal" data-film
-             data-full-hls="/assets/video/feel-so-young/index.m3u8"
-             data-title="Feel So Young">
-      <div class="film-media">
-        <img class="film-poster" src="/assets/video/loop-feel-so-young-poster.webp?v=2" alt="" width="960" height="720" loading="lazy">
-        <video class="film-loop" muted loop playsinline preload="none">
-          <source data-src="/assets/video/loop-feel-so-young.mp4" type="video/mp4">
-        </video>
-        <button class="film-open" type="button">Watch Feel So Young</button>
-      </div>
-      <h3 class="film-caption">Feel So Young <span>|</span> A Wedding Film</h3>
-    </article>
-
-    <article class="film-tile reveal" data-film
-             data-full-hls="/assets/video/chanson-dautomne/index.m3u8"
-             data-title="Chanson d'automne">
-      <div class="film-media">
-        <img class="film-poster" src="/assets/video/loop-chanson-dautomne-poster.webp?v=2" alt="" width="960" height="720" loading="lazy">
-        <video class="film-loop" muted loop playsinline preload="none">
-          <source data-src="/assets/video/loop-chanson-dautomne.mp4" type="video/mp4">
-        </video>
-        <button class="film-open" type="button">Watch Chanson d'automne</button>
-      </div>
-      <h3 class="film-caption">Chanson d'automne <span>|</span> A Wedding Film</h3>
-    </article>
-
-    <article class="film-tile reveal" data-film
-             data-full-mp4="/assets/video/where-forever-flows.mp4"
-             data-full-webm="/assets/video/where-forever-flows.webm"
-             data-title="Where Forever Flows">
-      <div class="film-media">
-        <img class="film-poster" src="/assets/video/loop-where-forever-flows-poster.webp?v=2" alt="" width="960" height="720" loading="lazy">
-        <video class="film-loop" muted loop playsinline preload="none">
-          <source data-src="/assets/video/loop-where-forever-flows.mp4?v=2" type="video/mp4">
-        </video>
-        <button class="film-open" type="button">Watch Where Forever Flows</button>
-      </div>
-      <h3 class="film-caption">Where Forever Flows <span>|</span> A Wedding Teaser</h3>
-    </article>
-
-    <article class="film-tile reveal" data-film
-             data-full-mp4="/assets/video/sotto-il-sole.mp4"
-             data-full-webm="/assets/video/sotto-il-sole.webm"
-             data-title="Sotto il Sole">
-      <div class="film-media">
-        <img class="film-poster" src="/assets/video/loop-sotto-il-sole-poster.webp?v=2" alt="" width="960" height="720" loading="lazy">
-        <video class="film-loop" muted loop playsinline preload="none">
-          <source data-src="/assets/video/loop-sotto-il-sole.mp4?v=3" type="video/mp4">
-        </video>
-        <button class="film-open" type="button">Watch Sotto il Sole</button>
-      </div>
-      <h3 class="film-caption">Sotto il Sole <span>|</span> An Italian Summer in Utah</h3>
-    </article>
-
-  </div>
 </section>
 
 <section class="section story">
@@ -188,13 +112,6 @@
   </div>
 </footer>
 
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Film player" hidden>
-  <button class="lightbox-close" type="button" aria-label="Close film">&times;</button>
-  <div class="lightbox-stage">
-    <video class="lightbox-video" playsinline controls preload="none"></video>
-  </div>
-</div>
-
-<script src="/assets/js/main.js?v=8" defer></script>
+<script src="/assets/js/main.js?v=9" defer></script>
 </body>
 </html>

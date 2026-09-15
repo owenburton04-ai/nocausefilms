@@ -13,22 +13,31 @@ branding, no "Watch on YouTube", no external requests of any kind.
 
 | Path | Page |
 | --- | --- |
-| `/` | Home: hero film, four films, about, investment |
+| `/` | Home: full-screen hero montage, about, investment |
 | `/wedding-deck/` | Pricing and packages. Unlinked from the nav, reachable by URL |
 | `/faqs/` | FAQs |
 | `/contact/` | Inquire. Only linked from the buttons at the end of a page |
 
-The nav is deliberately down to FAQs and the wordmark: Mckay wants someone to
-read the whole homepage before the Inquire button appears.
+The nav matches the live site: FAQs left, the stacked wordmark centred, a plain
+Inquire link right, all in white over the hero.
 
 ## Video setup
 
 Three layers, picked by job:
 
-- **Hero** is a muted progressive loop (`.webm` with an `.mp4` fallback for
-  Safari) behind a poster image, so the first paint is instant. It autoplays
-  immediately and is the only video on the page that does.
-- **Films section** shows four silent ~30s loops (`loop-*.mp4`), all
+- **Hero** is Mckay's 26s "Website Montage" (YouTube `cq5TwXduqTY`), a muted
+  progressive H.264 loop (`hero-montage.mp4`; a VP9 webm came out larger, so there is only the mp4)
+  that fills the viewport with the transparent header laid over it. The poster
+  (`hero-montage-poster.webp`, cut from the still Mckay sent) is also the
+  video's own first frame, so the page holds on the still for ~1s and then
+  fades into playback with no visible cut. That hold-then-play is deliberate:
+  Mckay wants the pool photo seen before the footage moves.
+- **Films section is removed for now** (Sep 2026). Mckay is cutting a Montana
+  wedding film that will be the only full film on the site. The tile + hover
+  preview + lightbox code in `main.js` and `style.css`, and the four films'
+  assets under `assets/video/`, are kept so one tile can be dropped back in.
+  The notes below describe how that path works.
+- **Films section (dormant)** shows silent ~30s loops (`loop-*.mp4`), all
   normalised to 4:3 960x720, in a four-across grid. Nothing autoplays: a
   preview runs while the pointer is over its tile, and on a touch screen the
   first tap plays it while a second tap on the same tile opens the full film.
@@ -38,10 +47,6 @@ Three layers, picked by job:
   that fades out on the first `playing` event. Covers are hand-picked frames
   from the full films, deliberately NOT the loops' first frames, and the fade
   is what keeps that from reading as a glitch when playback starts.
-  Loop windows were picked deliberately: both full-length films
-  carry burned-in subtitles and title cards through most of their runtime, so
-  the loops come from the stretches that do not (the reception in *Feel So
-  Young*, the exit and golden hour in *Chanson d'automne*).
 - **Full films** open in a lightbox with sound. The two 6.5-minute films are
   **HLS**: ffmpeg splits them into 6-second segments so a viewer only streams
   the part they actually watch instead of pulling ~60MB up front. Safari plays
@@ -94,8 +99,8 @@ headers the HLS segments need.
 ## Notes
 
 - Fonts: Geist, self-hosted in `assets/fonts/` (no Google Fonts request).
-- The homepage plays a short wordmark splash once per browser session
-  (`sessionStorage` key `ncf-intro`), skipped for `prefers-reduced-motion`.
+- There is no intro splash. One existed (a wordmark over white before the
+  hero); Mckay asked for it to go so the video starts the moment the link opens.
 - `/contact/` embeds Mckay's own **HoneyBook** contact form (placement
   `6a2ed9c8455fab2ae55f2ff7`), the same one his live site runs, so inquiries
   land in HoneyBook and nothing here needs a backend. The widget sets the

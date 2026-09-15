@@ -1,53 +1,25 @@
 // NO CAUSE FILMS — shared behavior
 
 // ---------------------------------------------------------------------------
-// Intro splash. The `intro-armed` class is set by an inline script in <head>
-// before first paint; this only runs the exit animation and unlocks scroll.
-// ---------------------------------------------------------------------------
-(function () {
-  var root = document.documentElement;
-  var intro = document.getElementById('intro');
-  if (!intro) return;
-
-  if (!root.classList.contains('intro-armed')) {
-    intro.remove();
-    return;
-  }
-
-  var done = false;
-  var finish = function () {
-    if (done) return;
-    done = true;
-    try { sessionStorage.setItem('ncf-intro', '1'); } catch (e) {}
-    intro.classList.add('is-leaving');
-    root.classList.remove('intro-armed');
-    // outlives the 1.15s panel fade plus the delayed mark fade
-    setTimeout(function () { intro.remove(); }, 1400);
-  };
-
-  var timer = setTimeout(finish, 1900);
-  // let an impatient visitor skip it
-  intro.addEventListener('click', function () {
-    clearTimeout(timer);
-    finish();
-  });
-})();
-
-// ---------------------------------------------------------------------------
-// Hero ambient video: sources are deferred via data-src so the poster
-// paints first; swap them in once the page is interactive.
+// Hero video: the poster is the montage's own first frame, so the page holds
+// on that still for a beat and then eases into playback. The video buffers
+// during the hold, and the poster only fades once frames are really rendering,
+// so a slow connection just sees the still for a little longer.
 // ---------------------------------------------------------------------------
 (function () {
   var hero = document.querySelector('[data-hero-video]');
   if (!hero) return;
-  // Started right away rather than on window load: the intro splash runs for
-  // ~2.4s over the top, and the reveal should land on footage that is already
-  // moving instead of cutting from a still poster to a video that just began.
+  var section = hero.closest('.hero');
   hero.querySelectorAll('source[data-src]').forEach(function (s) {
     s.src = s.dataset.src;
   });
   hero.load();
-  hero.play().catch(function () {});
+  hero.addEventListener('playing', function () {
+    if (section) section.classList.add('is-playing');
+  }, { once: true });
+  setTimeout(function () {
+    hero.play().catch(function () {});
+  }, 1000);
 })();
 
 // ---------------------------------------------------------------------------
