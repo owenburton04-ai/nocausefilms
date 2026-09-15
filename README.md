@@ -26,9 +26,9 @@ Inquire link right, all in white over the hero.
 Three layers, picked by job:
 
 - **Hero** is Mckay's 31s "Montage" (YouTube `q7y-FceybKE`, updated Sep 2026), a muted
-  progressive H.264 loop (`hero-montage.mp4`; a VP9 webm came out larger, so there is only the mp4)
+  progressive H.264 loop (`hero-montage-2.mp4`, renamed on the swap because `/assets/` is cached immutable for a year; a VP9 webm came out larger, so there is only the mp4)
   that fills the viewport with the transparent header laid over it. The poster
-  (`hero-montage-poster.webp`, cut from the still Mckay sent) is also the
+  (`hero-montage-2-poster.webp`, cut from the still Mckay sent) is also the
   video's own first frame, so the page holds on the still for ~1s and then
   fades into playback with no visible cut. That hold-then-play is deliberate:
   Mckay wants the pool photo seen before the footage moves.
