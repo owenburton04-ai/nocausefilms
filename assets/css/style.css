@@ -68,26 +68,32 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 1px solid var(--line);
 }
 
-/* Homepage header: transparent, laid over the full-screen hero in white, the
-   way the live site reads. The wordmark stacks on two lines with the tight
-   tracking of the live wordmark. */
+/* Homepage header: transparent, laid over the full-screen hero in white.
+   Metrics are taken from nocausefilms.com at 1024/1200/1440/2000 wide: the
+   wordmark is 2.8vw capped at 36px, weight 700, line-height 1, tracking
+   -0.02em, and it stacks to two lines once the header gets tight. Links are
+   12px capped, weight 600. The inset is 4vw but the row never grows past a
+   1400px centred column, which is why FAQs sits 300px in at 2000 wide. */
 .site-header--overlay {
   position: absolute;
   top: 0; left: 0; right: 0;
   background: transparent;
   border-bottom: 0;
   color: var(--white);
+  padding: clamp(1.5rem, 3.1vw, 2.9rem) max(var(--pad), calc((100% - 1400px) / 2));
+}
+.site-header--overlay .nav-link {
+  font-size: clamp(0.65rem, 1.1vw, 0.75rem);
+  font-weight: 600;
 }
 .site-header--overlay .brand {
   text-align: center;
-  line-height: 1.05;
+  line-height: 1;
   letter-spacing: -0.02em;
-  font-size: clamp(1.25rem, 2.75vw, 3.6rem);
+  font-size: clamp(1.25rem, 2.8vw, 2.25rem);
 }
-/* Like the live site, the wordmark runs on one line on wide screens and
-   stacks to two once the header gets tight. */
 .site-header--overlay .brand br { display: none; }
-@media (max-width: 1400px) {
+@media (max-width: 1100px) {
   .site-header--overlay .brand { white-space: normal; }
   .site-header--overlay .brand br { display: inline; }
 }
@@ -214,7 +220,7 @@ body.menu-open { overflow: hidden; }
    fades once frames are rendering, so the hold-then-play never hard cuts. */
 .hero-media img {
   z-index: 1;
-  transition: opacity 1.2s ease;
+  transition: opacity 1.6s ease-in-out;
 }
 .hero.is-playing .hero-media img { opacity: 0; }
 

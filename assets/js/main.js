@@ -18,27 +18,14 @@
     if (section) section.classList.add('is-playing');
   }, { once: true });
 
-  // Ease the motion in rather than cutting from a still to full-speed
-  // footage: start at quarter speed and ramp to normal over ~1.2s while the
-  // poster dissolves. Firefox/Safari clamp rates but accept this range.
-  var ramp = function () {
-    var start = performance.now();
-    var dur = 1200;
-    var tick = function (now) {
-      var p = Math.min(1, (now - start) / dur);
-      var eased = p * p * (3 - 2 * p);
-      hero.playbackRate = 0.25 + 0.75 * eased;
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-
+  // No slow-motion ramp: at 24fps a reduced playbackRate duplicates frames
+  // and reads as judder. The video runs at full speed from frame 0, which is
+  // the poster itself, and the long dissolve above is what softens the start.
   var started = false;
   var begin = function () {
     if (started) return;
     started = true;
-    hero.playbackRate = 0.25;
-    hero.play().then(ramp).catch(function () { hero.playbackRate = 1; });
+    hero.play().catch(function () {});
   };
 
   // Hold on the still for a second, but never start on a half-buffered
@@ -49,6 +36,14 @@
   setTimeout(function () { held = true; maybe(); }, 1000);
   // failsafe: a stalled canplay should not leave the still up forever
   setTimeout(begin, 4000);
+
+  // Browsers park media in a background tab; pick the loop back up when the
+  // visitor returns instead of leaving a frozen frame under the header.
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && started && hero.paused) {
+      hero.play().catch(function () {});
+    }
+  });
 })();
 
 // ---------------------------------------------------------------------------
