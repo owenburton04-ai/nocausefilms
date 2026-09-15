@@ -17,9 +17,38 @@
   hero.addEventListener('playing', function () {
     if (section) section.classList.add('is-playing');
   }, { once: true });
-  setTimeout(function () {
-    hero.play().catch(function () {});
-  }, 1000);
+
+  // Ease the motion in rather than cutting from a still to full-speed
+  // footage: start at quarter speed and ramp to normal over ~1.2s while the
+  // poster dissolves. Firefox/Safari clamp rates but accept this range.
+  var ramp = function () {
+    var start = performance.now();
+    var dur = 1200;
+    var tick = function (now) {
+      var p = Math.min(1, (now - start) / dur);
+      var eased = p * p * (3 - 2 * p);
+      hero.playbackRate = 0.25 + 0.75 * eased;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  var started = false;
+  var begin = function () {
+    if (started) return;
+    started = true;
+    hero.playbackRate = 0.25;
+    hero.play().then(ramp).catch(function () { hero.playbackRate = 1; });
+  };
+
+  // Hold on the still for a second, but never start on a half-buffered
+  // video: wait for canplay too, so the first frames are ready to move.
+  var held = false, ready = hero.readyState >= 3;
+  var maybe = function () { if (held && ready) begin(); };
+  hero.addEventListener('canplay', function () { ready = true; maybe(); }, { once: true });
+  setTimeout(function () { held = true; maybe(); }, 1000);
+  // failsafe: a stalled canplay should not leave the still up forever
+  setTimeout(begin, 4000);
 })();
 
 // ---------------------------------------------------------------------------
